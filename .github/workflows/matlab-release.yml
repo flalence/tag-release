@@ -13,8 +13,8 @@ defaults:
   run:
     shell: bash
 
-#permissions:
-#  contents: write
+permissions:
+  contents: write
 
 jobs:
   mytry1:
@@ -24,6 +24,7 @@ jobs:
 
     env:
       Matlab_Release: R2025b
+      Filename: "matlab-release.txt"
 
     steps:
 
@@ -31,7 +32,7 @@ jobs:
 
     - uses: actions/checkout@v5
 
-    - name: Setup MATLAB ${{ env.Matlab_Release }}
+    - name: Setup MATLAB $env.Matlab_Release
       uses: matlab-actions/setup-matlab@v2
       with:
         release: ${{ env.Matlab_Release }}
@@ -40,5 +41,8 @@ jobs:
     - name: Run MATLAB
       uses: matlab-actions/run-command@v2
       with:
-        command: |
-          matlabRelease
+        command: writelines(matlabRelease.Release, $env.Filename)
+
+    - run: |
+        echo "MATLAB Release"
+        cat $env.Filename
