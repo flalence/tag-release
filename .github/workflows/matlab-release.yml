@@ -13,6 +13,8 @@ defaults:
   run:
     shell: bash
 
+# Enable a permission to save a file.
+# The use of the writelines command in MATLAB needs it.
 permissions:
   contents: write
 
@@ -31,7 +33,7 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v5
 
-    - name: Set up MATLAB
+    - name: Set up MATLAB ${{ env.Matlab_Release }}
       uses: matlab-actions/setup-matlab@v2
       with:
         release: ${{ env.Matlab_Release }}
@@ -42,15 +44,9 @@ jobs:
       with:
         command: writelines(matlabRelease.Release, "${{ env.Filename }}")
 
-    - run: |
-        echo "MATLAB Release"
-        cat ${{ env.Filename }}
+    - name: After running MATLAB
+      # This is an example of creating a bash variable from the content of a single-line text file.
+      # (This is useful to build the filename of a zip archive.)
+      run: |
         MATLAB_RELEASE=$(< ${{ env.Filename }} )
-        echo $MATLAB_RELEASE
-        if [ "$MATLAB_RELEASE" = ${{ env.Matlab_Release }} ]; then
-          echo "Release matched"
-        else
-          echo "Release unmatched"
-          echo "Specified in YML: ${{ env.Filename }}"
-          echo "Actual: $MATLAB_RELEASE"
-        fi
+        echo "MATLAB Release: $MATLAB_RELEASE"
