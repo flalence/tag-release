@@ -1,11 +1,13 @@
 # MATLAB Release
 
-name: Deploy
+name: MATLAB Release
 
 on:
   workflow_dispatch:
   release:
     types: [created]
+  push:
+    branches: [main]
 
 defaults:
   run:
@@ -35,5 +37,8 @@ jobs:
         release: ${{ env.Matlab_Release }}
         cache: true
 
-    - name: Try
-      run: matlab -batch "matlabRelease"
+    - name: Run MATLAB
+      uses: matlab-actions/run-command@v2
+      with:
+        command: |
+          matlabRelease
