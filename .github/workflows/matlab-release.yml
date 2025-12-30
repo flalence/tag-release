@@ -43,8 +43,8 @@ jobs:
     - name: Run MATLAB
       uses: matlab-actions/run-command@v2
       with:
-        command: writelines(matlabRelease.Release, ${{ env.Filename }})
+        command: writelines(matlabRelease.Release, "${{ env.Filename }}")
 
     - run: |
         echo "MATLAB Release"
-        cat $env.Filename
+        cat ${{ env.Filename }}
