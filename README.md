@@ -5,6 +5,8 @@ when you push tags to your repository.
 
 ## Set up
 
+Make sure that the local repository is using the intended user.
+
 ```bash
 git config user.name
 git config user.email
@@ -35,6 +37,9 @@ Push the tag to the remote repository in GitHub.
 ```bash
 git push origin v1.0.0
 ```
+
+If a GitHub Actions YML file is configured to react to a tag being pushed,
+the above push starts a CI process for it.
 
 ## In case of authentication issues for using push
 
