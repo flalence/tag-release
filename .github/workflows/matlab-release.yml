@@ -1,4 +1,4 @@
-# MATLAB Release
+# Auto release when the commit has a tag.
 
 name: Try auto-release
 
