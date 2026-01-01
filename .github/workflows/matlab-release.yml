@@ -21,18 +21,19 @@ jobs:
 
     - name: Create ZIP from Release folder
       run: |
-          sudo apt-get update && sudo apt-get install -y zip
           TAG="${GITHUB_REF_NAME:-notag}"
+          echo "TAG: $TAG"
           ARCHIVE="${{ env.ArchiveBaseName }}-${TAG}.zip"
+          echo "ARCHIVE: $ARCHIVE"
           # Zip only the "Release" folder and its contents.
           cd Release
           zip -r "../$ARCHIVE" .
-          #echo "ARCHIVE_NAME=$ARCHIVE" >> $GITHUB_ENV
+          echo "ARCHIVE_NAME=$ARCHIVE" >> $GITHUB_ENV
 
     - name: Generate checksum (optional)
       run: |
           sha256sum "$ARCHIVE" > "$ARCHIVE.sha256"
-          #echo "CHECKSUM_NAME=$ARCHIVE.sha256" >> $GITHUB_ENV
+          echo "CHECKSUM_NAME=$ARCHIVE.sha256" >> $GITHUB_ENV
 
     - name: Create the Release and upload assets
       uses: softprops/action-gh-release@v2
