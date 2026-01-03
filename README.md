@@ -1,7 +1,13 @@
-# Try auto-release
+# Tag-Release, tag-triggered auto-release in GitHub
 
-Try GitHub Actions to automatically create releases
-when you push tags to your repository.
+This is a repository demonstrating the tag-release workflow
+where you automatically create a GitHub Release
+by pushing a git tag representing the semantic version such as `v1.2.3`.
+Pushing commits does not trigger the tag-release.
+
+In this repo, the tag-release is configured in the GitHub Actions config file:
+
+- `.github` > `.workflows` > `auto-release.yml`
 
 ## Set up
 
@@ -12,9 +18,9 @@ git config user.name
 git config user.email
 ```
 
-## Tag
+## Creating and pushing a git tag
 
-See the existing tags in a local repository.
+See the existing tags in a local git repository.
 
 ```bash
 git tag
@@ -26,7 +32,7 @@ Create a new tag.
 git tag v1.0.0
 ```
 
-Check that the intended tag is pointing to the HEAD.
+Check that the intended tag is pointing at HEAD.
 
 ```bash
 git tag --points-at HEAD
@@ -38,14 +44,29 @@ Push the tag to the remote repository in GitHub.
 git push origin v1.0.0
 ```
 
-If a GitHub Actions YML file is configured to react to a tag being pushed,
+If a GitHub Actions YML file is configured to react to a git tag being pushed,
 the above push starts a CI process for it.
 
-## In case of authentication issues for using push
+## Trouble shooting authentication issues on Windows
 
-Windows Credential Manager may interfere.
+If the push fails due to authentication issues on Windows,
+check the cache for Windows Credential Manager.
 
-Open the Control Panel, search "Credential Manager", and select "Windows Credentials".
-Delete any entries related to GitHub.
+1. Open the Control Panel.
+2. Search "Credential Manager".
+3. Select "Windows Credentials".
+4. Delete entries related to GitHub.
 
 Then try pushing again.
+
+## See also
+
+GitHub Actions > Check out
+
+- https://github.com/actions/checkout
+
+GitHub Action for creating GitHub Releases
+
+- https://github.com/softprops/action-gh-release
+
+_Copyright 2025-2026 Flalence_

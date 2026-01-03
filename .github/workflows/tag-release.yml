@@ -1,6 +1,13 @@
-# Auto release when the commit has a tag.
+# Tag-release workflow
+#
+# Create a GitHub release when a new git tag has been pushed.
+# The file name of a zip for a release is
+#   <archive_base_name>-<version>.zip
+# where
+#   <archive_base_name> is defined as a workflow environment
+#   <version> is a tag representing a semantic version (e.g., v1.2.3)
 
-name: Try auto-release
+name: Create GitHub Release
 
 env:
   ArchiveBaseName: "my-release"
@@ -11,11 +18,12 @@ on:
       - "v*.*.*"
 
 permissions:
+  # To create a zip file during a CI process, enable the write permission.
   contents: write
 
 jobs:
-  DeployJob:
-    name: Deploy job
+  ReleaseJob:
+    name: Release job
     runs-on: ubuntu-latest
     steps:
 
@@ -28,7 +36,7 @@ jobs:
           echo "TAG: $TAG"
           ARCHIVE="${{ env.ArchiveBaseName }}-${TAG}.zip"
           echo "ARCHIVE: $ARCHIVE"
-          # Zip only the "Release" folder and its contents.
+          # Zip the contents of the "Release" folder.
           cd Release
           zip -r "../$ARCHIVE" .
           echo "ARCHIVE=$ARCHIVE" >> $GITHUB_ENV
@@ -38,11 +46,11 @@ jobs:
           sha256sum "${{ env.ARCHIVE }}" > "${{ env.ARCHIVE }}.sha256"
           echo "CHECKSUM=${{ env.ARCHIVE }}.sha256" >> $GITHUB_ENV
 
-    - name: Create the Release and upload assets
+    - name: Create a GitHub Release and upload assets
       uses: softprops/action-gh-release@v2
       with:
           # ${{ github.ref_name }} is a tag that triggered the workflow, e.g., v1.2.3
-          name: "Release ${{ github.ref_name }}"
+          name: "Release version ${{ github.ref_name }}"
           draft: false
           prerelease: false
           files: |
